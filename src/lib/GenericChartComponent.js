@@ -21,6 +21,7 @@ class GenericChartComponent extends GenericComponent {
 		this.shouldTypeProceed = this.shouldTypeProceed.bind(this);
 		this.preEvaluate = this.preEvaluate.bind(this);
 	}
+
 	preCanvasDraw(ctx, moreProps) {
 		super.preCanvasDraw(ctx, moreProps);
 		ctx.save();
@@ -49,10 +50,12 @@ class GenericChartComponent extends GenericComponent {
 			ctx.clip();
 		}
 	}
+
 	postCanvasDraw(ctx, moreProps) {
 		super.postCanvasDraw(ctx, moreProps);
 		ctx.restore();
 	}
+
 	updateMoreProps(moreProps) {
 		super.updateMoreProps(moreProps);
 		const { chartConfig: chartConfigList } = moreProps;
@@ -80,6 +83,7 @@ class GenericChartComponent extends GenericComponent {
 			}
 		}
 	}
+
 	preEvaluate(/* type, moreProps */) {
 		/* if (
 			type === "mousemove"
@@ -92,6 +96,7 @@ class GenericChartComponent extends GenericComponent {
 			}
 		} */
 	}
+
 	shouldTypeProceed(type, moreProps) {
 		if (
 			(type === "mousemove" || type === "click")

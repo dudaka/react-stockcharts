@@ -16,6 +16,7 @@ class Chart extends PureComponent {
 		this.yScale = this.yScale.bind(this);
 		this.listener = this.listener.bind(this);
 	}
+
 	componentWillMount() {
 		const { id } = this.props;
 		const { subscribe } = this.context;
@@ -25,11 +26,13 @@ class Chart extends PureComponent {
 			}
 		);
 	}
+
 	componentWillUnmount() {
 		const { id } = this.props;
 		const { unsubscribe } = this.context;
 		unsubscribe("chart_" + id);
 	}
+
 	listener(type, moreProps, state, e) {
 		const { id, onContextMenu } = this.props;
 
@@ -40,10 +43,12 @@ class Chart extends PureComponent {
 			}
 		}
 	}
+
 	yScale() {
 		const chartConfig = find(this.context.chartConfig, each => each.id === this.props.id);
 		return chartConfig.yScale.copy();
 	}
+
 	getChildContext() {
 		const { id: chartId } = this.props;
 		const chartConfig = find(this.context.chartConfig, each => each.id === chartId);
@@ -53,6 +58,7 @@ class Chart extends PureComponent {
 			chartConfig,
 		};
 	}
+
 	render() {
 		const { origin } = find(this.context.chartConfig, each => each.id === this.props.id);
 		const [x, y] = origin;

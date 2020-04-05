@@ -59,7 +59,10 @@ class GenericComponent extends Component {
 	}
 	preEvaluate() {
 	}
+
 	listener(type, moreProps, state, e) {
+		console.log(`[GenericComponent]listener, type = ${type}, moreProps = `, moreProps, e);
+		console.log("===== props = ", this.props);
 		// console.log(e.shiftKey)
 		if (isDefined(moreProps)) {
 			this.updateMoreProps(moreProps);
@@ -69,6 +72,7 @@ class GenericComponent extends Component {
 		this.evaluationInProgress = false;
 	}
 	evaluateType(type, e) {
+		console.log(type, this.props);
 		const newType = aliases[type] || type;
 		const proceed = this.props.drawOn.indexOf(newType) > -1;
 
@@ -97,12 +101,11 @@ class GenericComponent extends Component {
 				if (this.props.onContextMenu) {
 					this.props.onContextMenu(this.getMoreProps(), e);
 				}
-				if (
-					this.moreProps.hovering
-				&& this.props.onContextMenuWhenHover
-				) {
+
+				if (this.moreProps.hovering && this.props.onContextMenuWhenHover) {
 					this.props.onContextMenuWhenHover(this.getMoreProps(), e);
 				}
+
 				break;
 			}
 			case "mousedown": {
@@ -358,11 +361,14 @@ class GenericComponent extends Component {
 
 		return (morePropsDecorator || identity)(moreProps);
 	}
+
 	preCanvasDraw() {
 		// do nothing
 	}
+
 	postCanvasDraw() {
 	}
+
 	drawOnCanvas() {
 		const { canvasDraw, canvasToDraw } = this.props;
 		const { getCanvasContexts } = this.context;
@@ -375,6 +381,7 @@ class GenericComponent extends Component {
 		canvasDraw(ctx, moreProps);
 		this.postCanvasDraw(ctx, moreProps);
 	}
+
 	render() {
 		const { chartCanvasType, chartId } = this.context;
 		const { canvasDraw, clip, svgDraw } = this.props;

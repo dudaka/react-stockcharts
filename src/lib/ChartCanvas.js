@@ -128,6 +128,7 @@ function calculateFullData(props) {
 		filterData
 	};
 }
+
 function resetChart(props, firstCalculation = false) {
 	if (process.env.NODE_ENV !== "production") {
 		if (!firstCalculation) log("CHART RESET");
@@ -303,7 +304,6 @@ function pinchCoordinates(pinch) {
 	};
 }
 
-
 class ChartCanvas extends Component {
 	constructor() {
 		super();
@@ -353,30 +353,37 @@ class ChartCanvas extends Component {
 		this.mutableState = {};
 		this.lastSubscriptionId = 0;
 	}
+
 	saveEventCaptureNode(node) {
 		this.eventCaptureNode = node;
 	}
+
 	saveCanvasContainerNode(node) {
 		this.canvasContainerNode = node;
 	}
+
 	getMutableState() {
 		return this.mutableState;
 	}
+
 	getDataInfo() {
 		return {
 			...this.state,
 			fullData: this.fullData,
 		};
 	}
+
 	getCanvasContexts() {
 		if (this.canvasContainerNode) {
 			return this.canvasContainerNode.getCanvasContexts();
 		}
 	}
+
 	generateSubscriptionId() {
 		this.lastSubscriptionId++;
 		return this.lastSubscriptionId;
 	}
+
 	clearBothCanvas() {
 		const canvases = this.getCanvasContexts();
 		if (canvases && canvases.axes) {
@@ -387,6 +394,7 @@ class ChartCanvas extends Component {
 			], this.props.ratio);
 		}
 	}
+
 	clearMouseCanvas() {
 		const canvases = this.getCanvasContexts();
 		if (canvases && canvases.mouseCoord) {
@@ -396,6 +404,7 @@ class ChartCanvas extends Component {
 			], this.props.ratio);
 		}
 	}
+
 	clearThreeCanvas() {
 		const canvases = this.getCanvasContexts();
 		if (canvases && canvases.axes) {
@@ -407,6 +416,7 @@ class ChartCanvas extends Component {
 			], this.props.ratio);
 		}
 	}
+
 	subscribe(id, rest) {
 		const { getPanConditions = functor({
 			draggable: false,
@@ -418,18 +428,22 @@ class ChartCanvas extends Component {
 			getPanConditions,
 		});
 	}
+
 	unsubscribe(id) {
 		this.subscriptions = this.subscriptions.filter(each => each.id !== id);
 	}
+
 	getAllPanConditions() {
 		return this.subscriptions
 			.map(each => each.getPanConditions());
 	}
+
 	setCursorClass(className) {
 		if (this.eventCaptureNode != null) {
 			this.eventCaptureNode.setCursorClass(className);
 		}
 	}
+
 	amIOnTop(id) {
 		const dragableComponents = this.subscriptions
 			.filter(each => each.getPanConditions().draggable);
@@ -437,6 +451,7 @@ class ChartCanvas extends Component {
 		return dragableComponents.length > 0
 			&& last(dragableComponents).id === id;
 	}
+
 	handleContextMenu(mouseXY, e) {
 		const { xAccessor, chartConfig, plotData, xScale } = this.state;
 
@@ -449,6 +464,7 @@ class ChartCanvas extends Component {
 			currentCharts,
 		}, e);
 	}
+
 	calculateStateForDomain(newDomain) {
 		const {
 			xAccessor,
@@ -486,6 +502,7 @@ class ChartCanvas extends Component {
 			chartConfig,
 		};
 	}
+
 	pinchZoomHelper(initialPinch, finalPinch) {
 		const { xScale: initialPinchXScale } = initialPinch;
 
@@ -544,10 +561,12 @@ class ChartCanvas extends Component {
 			currentItem,
 		};
 	}
+
 	cancelDrag() {
 		this.eventCaptureNode.cancelDrag();
 		this.triggerEvent("dragcancel");
 	}
+
 	handlePinchZoom(initialPinch, finalPinch, e) {
 		if (!this.waitingForPinchZoomAnimationFrame) {
 			this.waitingForPinchZoomAnimationFrame = true;
@@ -564,6 +583,7 @@ class ChartCanvas extends Component {
 			});
 		}
 	}
+
 	handlePinchZoomEnd(initialPinch, e) {
 		const { xAccessor } = this.state;
 
@@ -590,6 +610,7 @@ class ChartCanvas extends Component {
 			});
 		}
 	}
+
 	handleZoom(zoomDirection, mouseXY, e) {
 		if (this.panInProgress)
 			return;
@@ -648,6 +669,7 @@ class ChartCanvas extends Component {
 			}
 		});
 	}
+
 	xAxisZoom(newDomain) {
 		const { xScale, plotData, chartConfig } = this.calculateStateForDomain(newDomain);
 		this.clearThreeCanvas();
@@ -667,6 +689,7 @@ class ChartCanvas extends Component {
 			if (start < end) onLoadMore(start, end);
 		});
 	}
+
 	yAxisZoom(chartId, newDomain) {
 		this.clearThreeCanvas();
 		const { chartConfig: initialChartConfig } = this.state;
@@ -688,6 +711,7 @@ class ChartCanvas extends Component {
 			chartConfig,
 		});
 	}
+
 	triggerEvent(type, props, e) {
 		// console.log("triggering ->", type);
 
@@ -706,10 +730,12 @@ class ChartCanvas extends Component {
 				each.draw(props);
 		});
 	}
+
 	redraw() {
 		this.clearThreeCanvas();
 		this.draw({ force: true });
 	}
+
 	panHelper(mouseXY, initialXScale, { dx, dy }, chartsToPan) {
 		const { xAccessor, displayXAccessor, chartConfig: initialChartConfig } = this.state;
 		const { filterData } = this.state;
@@ -758,6 +784,7 @@ class ChartCanvas extends Component {
 			currentItem,
 		};
 	}
+
 	handlePan(mousePosition, panStartXScale, dxdy, chartsToPan, e) {
 		if (!this.waitingForPanAnimationFrame) {
 			this.waitingForPanAnimationFrame = true;
@@ -787,6 +814,7 @@ class ChartCanvas extends Component {
 			});
 		}
 	}
+
 	handlePanEnd(mousePosition, panStartXScale, dxdy, chartsToPan, e) {
 		const state = this.panHelper(mousePosition, panStartXScale, dxdy, chartsToPan);
 		// console.log(this.canvasDrawCallbackList.map(d => d.type));
@@ -826,14 +854,17 @@ class ChartCanvas extends Component {
 			});
 		});
 	}
+
 	handleMouseDown(mousePosition, currentCharts, e) {
 		this.triggerEvent("mousedown", this.mutableState, e);
 	}
+
 	handleMouseEnter(e) {
 		this.triggerEvent("mouseenter", {
 			show: true,
 		}, e);
 	}
+
 	handleMouseMove(mouseXY, inputType, e) {
 		if (!this.waitingForMouseMoveAnimationFrame) {
 			this.waitingForMouseMoveAnimationFrame = true;
@@ -864,14 +895,17 @@ class ChartCanvas extends Component {
 			});
 		}
 	}
+
 	handleMouseLeave(e) {
 		this.triggerEvent("mouseleave", { show: false }, e);
 		this.clearMouseCanvas();
 		this.draw({ trigger: "mouseleave" });
 	}
+
 	handleDragStart({ startPos }, e) {
 		this.triggerEvent("dragstart", { startPos }, e);
 	}
+
 	handleDrag({ startPos, mouseXY }, e) {
 		const { chartConfig, plotData, xScale, xAccessor } = this.state;
 		const currentCharts = getCurrentCharts(chartConfig, mouseXY);
@@ -895,6 +929,7 @@ class ChartCanvas extends Component {
 			this.draw({ trigger: "drag" });
 		});
 	}
+
 	handleDragEnd({ mouseXY }, e) {
 		this.triggerEvent("dragend", { mouseXY }, e);
 
@@ -903,6 +938,7 @@ class ChartCanvas extends Component {
 			this.draw({ trigger: "dragend" });
 		});
 	}
+
 	handleClick(mousePosition, e) {
 		this.triggerEvent("click", this.mutableState, e);
 
@@ -911,9 +947,11 @@ class ChartCanvas extends Component {
 			this.draw({ trigger: "click" });
 		});
 	}
+
 	handleDoubleClick(mousePosition, e) {
 		this.triggerEvent("dblclick", {}, e);
 	}
+
 	getChildContext() {
 		const dimensions = getDimensions(this.props);
 		return {
@@ -940,11 +978,13 @@ class ChartCanvas extends Component {
 			setCursorClass: this.setCursorClass,
 		};
 	}
+
 	componentWillMount() {
 		const { fullData, ...state } = resetChart(this.props, true);
 		this.setState(state);
 		this.fullData = fullData;
 	}
+
 	componentWillReceiveProps(nextProps) {
 		const reset = shouldResetChart(this.props, nextProps);
 
@@ -1044,10 +1084,12 @@ class ChartCanvas extends Component {
 			});
 		}
 	}
+
 	shouldComponentUpdate() {
 		// console.log("Happneing.....", !this.panInProgress)
 		return !this.panInProgress;
 	}
+
 	render() {
 
 		const { type, height, width, margin, className, zIndex, defaultFocus, ratio, mouseMoveEvent, panEvent, zoomEvent } = this.props;
@@ -1060,12 +1102,19 @@ class ChartCanvas extends Component {
 
 		const cursorStyle = useCrossHairStyleCursor && interaction;
 		const cursor = getCursorStyle();
+
+		console.log("useCrossHairStyleCursor", cursorStyle);
+		console.log("mouseMoveEvent", mouseMoveEvent);
+		console.log("interaction", interaction);
+		console.log("focus", defaultFocus);
+		console.log("disableInteraction", this.props.disableInteraction);
+
 		return (
 			<div style={{ position: "relative", width, height }} className={className} onClick={onSelect}>
-				<CanvasContainer ref={this.saveCanvasContainerNode}
+				{/* <CanvasContainer ref={this.saveCanvasContainerNode}
 					type={type}
 					ratio={ratio}
-					width={width} height={height} zIndex={zIndex}/>
+					width={width} height={height} zIndex={zIndex}/> */}
 				<svg className={className} width={width} height={height} style={{ position: "absolute", zIndex: (zIndex + 5) }}>
 					{cursor}
 					<defs>
@@ -1082,8 +1131,8 @@ class ChartCanvas extends Component {
 							ref={this.saveEventCaptureNode}
 							useCrossHairStyleCursor={cursorStyle}
 							mouseMove={mouseMoveEvent && interaction}
-							zoom={zoomEvent && interaction}
-							pan={panEvent && interaction}
+							// zoom={zoomEvent && interaction}
+							// pan={panEvent && interaction}
 
 							width={dimensions.width}
 							height={dimensions.height}

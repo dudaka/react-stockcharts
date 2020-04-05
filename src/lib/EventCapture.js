@@ -99,7 +99,9 @@ class EventCapture extends Component {
 		}
 		onMouseLeave(e);
 	}
+
 	handleWheel(e) {
+		console.log("[EventCapture] handleWheel, state = ", this.state);
 		const { zoom, onZoom } = this.props;
 		const { panInProgress } = this.state;
 
@@ -110,7 +112,6 @@ class EventCapture extends Component {
 
 		if (zoom && this.focus && yZoom && !panInProgress) {
 			const zoomDir = e.deltaY > 0 ? 1 : -1;
-
 			onZoom(zoomDir, mouseXY, e);
 		} else if (this.focus) {
 			if (this.shouldPan()) {
@@ -149,6 +150,7 @@ class EventCapture extends Component {
 			this.queuePanEnd();
 		}
 	}
+
 	queuePanEnd() {
 		if (isDefined(this.panEndTimeout)) {
 			clearTimeout(this.panEndTimeout);
@@ -157,6 +159,7 @@ class EventCapture extends Component {
 			this.handlePanEnd();
 		}, 100);
 	}
+
 	handleMouseMove() {
 		const e = d3Event;
 
@@ -171,6 +174,7 @@ class EventCapture extends Component {
 			onMouseMove(newPos, "mouse", e);
 		}
 	}
+
 	handleClick(e) {
 		const mouseXY = mousePosition(e);
 		const { onClick, onDoubleClick } = this.props;
@@ -190,9 +194,11 @@ class EventCapture extends Component {
 			}
 		}
 	}
+
 	handleRightClick(e) {
 		e.stopPropagation();
 		e.preventDefault();
+
 		const { onContextMenu, onPanEnd } = this.props;
 
 		const mouseXY = mousePosition(e, this.node.getBoundingClientRect());
@@ -281,6 +287,7 @@ class EventCapture extends Component {
 			somethingSelected
 		};
 	}
+
 	handleMouseDown(e) {
 		if (e.button !== 0) {
 			return;

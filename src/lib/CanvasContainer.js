@@ -13,17 +13,20 @@ class CanvasContainer extends Component {
 		this.setDrawCanvas = this.setDrawCanvas.bind(this);
 		this.drawCanvas = {};
 	}
+
 	setDrawCanvas(node) {
 		if (isDefined(node))
 			this.drawCanvas[node.id] = node.getContext("2d");
 		else
 			this.drawCanvas = {};
 	}
+
 	getCanvasContexts() {
 		if (isDefined(this.drawCanvas.axes)) {
 			return this.drawCanvas;
 		}
 	}
+
 	render() {
 		const { height, width, type, zIndex, ratio } = this.props;
 		if (type === "svg") return null;

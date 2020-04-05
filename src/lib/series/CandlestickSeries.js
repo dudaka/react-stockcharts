@@ -18,10 +18,14 @@ class CandlestickSeries extends Component {
 		this.renderSVG = this.renderSVG.bind(this);
 		this.drawOnCanvas = this.drawOnCanvas.bind(this);
 	}
+
 	drawOnCanvas(ctx, moreProps) {
+		console.log("[CandlestickSeries] drawOnCanvas");
 		drawOnCanvas(ctx, this.props, moreProps);
 	}
+
 	renderSVG(moreProps) {
+		console.log("[CandlestickSeries] renderSVG");
 		const { className, wickClassName, candleClassName } = this.props;
 		const { xScale, chartConfig: { yScale }, plotData, xAccessor } = moreProps;
 
